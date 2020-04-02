@@ -41,7 +41,7 @@ function Carousel () {
             speed = datas.speed,
             speeds = 1;      
         $liList[idNum].className = "active";
-        function toLeft(){
+        function toShang(){
             if(idNum === 0){
                 idNum = datas.imgNum-1;
                 $slider[0].style.transition ="left "+speeds+"s";
@@ -58,7 +58,7 @@ function Carousel () {
             }
             showDot (); 
         }
-        function toRight(){
+        function toNext(){
             if(idNum === datas.imgNum-1){
                 idNum = 0;
                 $slider[0].style.transition ="left "+speeds+"s";
@@ -75,24 +75,21 @@ function Carousel () {
             }
             showDot ();
         }
-        //左右滑动 防抖
-        function debounce(fun){
-            let detimer;
+        function changeId(fun){
+            let dTimer;
             return function(){
-                clearTimeout(detimer);
-                detimer = setTimeout(()=>{
+                clearTimeout(dTimer);
+                dTimer = setTimeout(()=>{
                     fun.call(this);
-                },1)
+                },1000)
             }
         }
-        // 自动播放
-        (function run() {
+        function run() {
             timer = setInterval(function () {
-                toRight();
-            },3500);
-        })();
-        $left.click(debounce(toLeft));
-        $right.click(debounce(toRight));
+                toNext();
+            },2000);
+        };
+        run();
         function showDot () {
             for(var i = 0; i < $liList.length; i++){
                 $liList[i].className = "";
@@ -106,17 +103,18 @@ function Carousel () {
             $slider[0].style.left=num * -1200+"px";
             showDot ();
         }
-        $liList.click(debounce(dotClick));
-        // 鼠标移入移出
-        $box.onmouseenter = function () {
+        $liList.click(changeId(dotClick));
+        $box[0].onmouseenter = function () {
             clearInterval(timer);
-            $span[0].style.opacity = 0.5;
-            $span[1].style.opacity = 0.5;
+            $span[0].style.opacity = 0.6;
+            $span[1].style.opacity = 0.6;
         }
-        $box.onmouseleave = function () {
+        $box[0].onmouseleave = function () {
             run();
             $span[0].style.opacity = 0;
             $span[1].style.opacity = 0;
         }
+        $left.click(changeId(toShang));
+        $right.click(changeId(toNext));
     }
 }
